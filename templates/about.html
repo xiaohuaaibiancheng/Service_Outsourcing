@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="title">关于我们</h1>
+    <p class="subtitle">了解"新闻检测"的使命、价值观以及我们提供的服务。</p>
+    
+    <div class="about-container">
+        <!-- 使命部分 -->
+        <div class="about-section">
+            <div class="about-icon">
+                <i class="icon-mission"></i>
+            </div>
+            <h2>我们的使命</h2>
+            <p>新闻检测致力于通过先进的人工智能技术，为用户提供准确的新闻真实性检测服务。我们希望通过技术手段，帮助用户识别虚假新闻，维护健康的信息环境。</p>
+        </div>
+
+        <!-- 价值观部分 -->
+        <div class="about-section">
+            <div class="about-icon">
+                <i class="icon-values"></i>
+            </div>
+            <h2>我们的价值观</h2>
+            <ul class="values-list">
+                <li>专业性：依托专业知识，为用户提供可靠服务</li>
+                <li>用户友好：通过简洁的界面设计，让用户轻松使用</li>
+                <li>创新与发展：持续优化算法，提升检测准确率</li>
+                <li>诚信负责：对用户负责，确保服务质量</li>
+            </ul>
+        </div>
+
+        <!-- 服务介绍部分 -->
+        <div class="about-section">
+            <div class="about-icon">
+                <i class="icon-service"></i>
+            </div>
+            <h2>我们的服务</h2>
+            <div class="service-grid">
+                <div class="service-item">
+                    <h3>新闻真实性检测</h3>
+                    <p>利用先进算法分析新闻真实性</p>
+                </div>
+                <div class="service-item">
+                    <h3>实时检测</h3>
+                    <p>快速响应，即时反馈</p>
+                </div>
+                <div class="service-item">
+                    <h3>准确度分析</h3>
+                    <p>提供详细的分析报告</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>虚假新闻检测系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">新闻检测</div>
+        <div class="nav-links">
+           
+            <a href="/">AI新闻检测</a>
+            <a href="/">虚假新闻检测</a>
+            <a href="{{ url_for('about') }}">关于我们</a>
+            <a href="{{ url_for('contact') }}">联系我们</a>
+            
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <footer>
+        <p>© 2025 新闻检测. 保留所有权利.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

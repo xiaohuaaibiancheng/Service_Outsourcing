@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- 操作指南弹窗 -->
+{% if show_guide %}
+<div id="guide-modal" class="modal">
+    <div class="modal-content">
+        <h2>用户操作指南</h2>
+        <div class="guide-content">
+            <h3>欢迎使用新闻检测系统</h3>
+            <p>使用步骤：</p>
+            <ol>
+                <li>在文本框中输入需要检测的新闻内容</li>
+                <li>点击"开始检测"按钮</li>
+                <li>系统将自动分析新闻真实性</li>
+                <li>查看检测结果和详细分析报告</li>
+            </ol>
+            <p>注意事项：</p>
+            <ul>
+                <li>输入文本长度建议在50-5000字之间</li>
+                <li>支持中文和英文内容检测</li>
+                <li>检测结果仅供参考</li>
+            </ul>
+        </div>
+        <button id="confirm-guide" class="submit-btn">我已阅读并知晓</button>
+    </div>
+</div>
+{% endif %}
+
+<div class="container">
+    <h1 class="title">虚假新闻检测系统</h1>
+    
+    <div class="input-section">
+        <form id="news-form">
+            <textarea 
+                id="news-text" 
+                name="news_text" 
+                placeholder="请在此输入需要检测的新闻内容..."
+                rows="10"></textarea>
+            <button type="submit" class="submit-btn">开始检测</button>
+        </form>
+    </div>
+    
+    <div class="result-section" style="display: none;">
+        <h2>检测结果</h2>
+        <div class="result-box">
+            <p>检测结论：<span id="prediction-result"></span></p>
+            <p>置信度：<span id="confidence-score"></span></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
