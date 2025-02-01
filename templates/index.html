@@ -1,52 +1,261 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-<!-- 操作指南弹窗 -->
-{% if show_guide %}
-<div id="guide-modal" class="modal">
-    <div class="modal-content">
-        <h2>用户操作指南</h2>
-        <div class="guide-content">
-            <h3>欢迎使用新闻检测系统</h3>
-            <p>使用步骤：</p>
-            <ol>
-                <li>在文本框中输入需要检测的新闻内容</li>
-                <li>点击"开始检测"按钮</li>
-                <li>系统将自动分析新闻真实性</li>
-                <li>查看检测结果和详细分析报告</li>
-            </ol>
-            <p>注意事项：</p>
-            <ul>
-                <li>输入文本长度建议在50-5000字之间</li>
-                <li>支持中文和英文内容检测</li>
-                <li>检测结果仅供参考</li>
-            </ul>
-        </div>
-        <button id="confirm-guide" class="submit-btn">我已阅读并知晓</button>
+<div class="about-container">
+    <h1 class="about-title">关于新闻虚假检测系统</h1>
+    <div class="about-content">
+        <p class="about-description">
+            新闻虚假检测系统是一个基于人工智能技术的创新工具，旨在帮助用户快速识别虚假新闻。通过分析新闻文本、图片、视频等多种形式的内容，系统能够综合判断新闻的真实性，为用户提供可靠的信息验证服务。
+        </p>
+        <p class="about-description">
+            在当今信息爆炸的时代，虚假新闻的传播速度远超真实新闻，给社会带来了巨大的负面影响。我们的系统结合了最新的自然语言处理（NLP）技术和深度学习模型，能够高效、准确地检测新闻内容的真实性，帮助用户避免被误导。
+        </p>
+        <p class="about-description">
+            无论是社交媒体上的热点新闻，还是传统媒体的报道，我们的系统都能提供实时的检测结果，帮助用户做出明智的判断。
+        </p>
     </div>
-</div>
-{% endif %}
 
-<div class="container">
-    <h1 class="title">虚假新闻检测系统</h1>
-    
-    <div class="input-section">
-        <form id="news-form">
-            <textarea 
-                id="news-text" 
-                name="news_text" 
-                placeholder="请在此输入需要检测的新闻内容..."
-                rows="10"></textarea>
-            <button type="submit" class="submit-btn">开始检测</button>
-        </form>
+    <!-- 新增分隔线 -->
+    <div class="section-divider"></div>
+
+    <div class="about-features">
+        <h2 class="features-title">核心功能</h2>
+        <ul class="features-list">
+            <li class="feature-item">多模态分析：支持文本、图片、视频的综合检测，全面覆盖新闻内容。</li>
+            <li class="feature-item">深度学习模型：基于最新的AI技术，准确率高达95%以上。</li>
+            <li class="feature-item">实时检测：快速反馈新闻真实性，帮助用户及时获取可信信息。</li>
+            <li class="feature-item">用户友好：简洁易用的界面设计，无需专业知识即可操作。</li>
+            <li class="feature-item">数据可视化：提供直观的检测结果报告，便于用户理解。</li>
+        </ul>
     </div>
-    
-    <div class="result-section" style="display: none;">
-        <h2>检测结果</h2>
-        <div class="result-box">
-            <p>检测结论：<span id="prediction-result"></span></p>
-            <p>置信度：<span id="confidence-score"></span></p>
-        </div>
+
+    <!-- 新增分隔线 -->
+    <div class="section-divider"></div>
+
+    <div class="about-mission">
+        <h2 class="mission-title">我们的使命</h2>
+        <p class="mission-description">
+            我们的使命是通过技术创新，帮助用户在海量信息中快速识别虚假新闻，提升公众的信息素养，促进健康的信息传播环境。我们相信，真实的信息是构建信任社会的基石。
+        </p>
+    </div>
+
+    <!-- 新增分隔线 -->
+    <div class="section-divider"></div>
+
+    <div class="about-team">
+        <h2 class="team-title">团队介绍</h2>
+        <p class="team-description">
+            我们的团队由一群热爱技术的工程师和数据科学家组成，专注于人工智能和自然语言处理领域的研究与应用。我们致力于将最前沿的技术转化为实用的工具，为用户提供优质的服务。
+        </p>
     </div>
 </div>
+
+<style>
+    /* ===== 全局样式 ===== */
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* ===== 容器样式 ===== */
+    .about-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 50px 30px;
+        background-color: #fff;
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    /* ===== 标题样式 ===== */
+    .about-title {
+        text-align: center;
+        font-size: 2.8rem;
+        color: #2c3e50;
+        margin-bottom: 40px;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1.2;
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* ===== 段落样式 ===== */
+    .about-content {
+        margin-bottom: 50px;
+    }
+
+    .about-description {
+        font-size: 1.15rem;
+        line-height: 1.8;
+        color: #4a5568;
+        margin-bottom: 25px;
+        padding: 0 15px;
+    }
+
+    /* ===== 功能列表样式 ===== */
+    .about-features {
+        background: linear-gradient(145deg, #f8f9fa 0%, #ffffff 100%);
+        padding: 30px;
+        border-radius: 12px;
+        margin-bottom: 50px;
+        border: 1px solid rgba(52, 152, 219, 0.1);
+    }
+
+    .features-title {
+        font-size: 2rem;
+        color: #2c3e50;
+        margin-bottom: 25px;
+        font-weight: 650;
+        letter-spacing: -0.02em;
+    }
+
+    .features-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .feature-item {
+        font-size: 1.1rem;
+        color: #4a5568;
+        padding: 15px 20px;
+        margin: 8px 0;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex;
+        align-items: center;
+    }
+
+    .feature-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-item::before {
+        content: "✓";
+        color: #2ecc71;
+        margin-right: 12px;
+        font-size: 1.4rem;
+        font-weight: 700;
+    }
+
+    /* ===== 使命样式 ===== */
+    .about-mission {
+        margin-bottom: 50px;
+        padding: 30px;
+        background: rgba(236, 240, 241, 0.3);
+        border-radius: 12px;
+    }
+
+    .mission-title {
+        font-size: 2rem;
+        color: #2c3e50;
+        margin-bottom: 25px;
+        font-weight: 650;
+        letter-spacing: -0.02em;
+    }
+
+    .mission-description {
+        font-size: 1.15rem;
+        line-height: 1.8;
+        color: #4a5568;
+        padding: 0 15px;
+    }
+
+    /* ===== 团队介绍样式 ===== */
+    .about-team {
+        margin-bottom: 40px;
+        padding: 30px;
+        background: rgba(236, 240, 241, 0.3);
+        border-radius: 12px;
+    }
+
+    .team-title {
+        font-size: 2rem;
+        color: #2c3e50;
+        margin-bottom: 25px;
+        font-weight: 650;
+        letter-spacing: -0.02em;
+    }
+
+    .team-description {
+        font-size: 1.15rem;
+        line-height: 1.8;
+        color: #4a5568;
+        padding: 0 15px;
+    }
+
+    /* ===== 分隔线样式 ===== */
+    .section-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent 0%, rgba(52, 152, 219, 0.2) 50%, transparent 100%);
+        margin: 40px 0;
+    }
+
+    /* ===== 响应式设计 ===== */
+    @media (max-width: 768px) {
+        .about-container {
+            padding: 30px 20px;
+            border-radius: 12px;
+        }
+
+        .about-title {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+        }
+
+        .about-description,
+        .mission-description,
+        .team-description {
+            font-size: 1rem;
+            padding: 0;
+        }
+
+        .features-title,
+        .mission-title,
+        .team-title {
+            font-size: 1.7rem;
+        }
+
+        .feature-item {
+            font-size: 1rem;
+            padding: 12px 15px;
+        }
+
+        .about-features,
+        .about-mission,
+        .about-team {
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+
+        .section-divider {
+            margin: 30px 0;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .about-container {
+            padding: 25px 15px;
+        }
+
+        .about-title {
+            font-size: 2rem;
+        }
+
+        .features-title,
+        .mission-title,
+        .team-title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
 {% endblock %}

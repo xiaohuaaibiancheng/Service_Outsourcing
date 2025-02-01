@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">AI 对话</h2>
+  <div class="chat-container">
+    <div class="chat-box" id="chatBox"></div>
+    <div class="chat-input d-flex">
+      <input type="text" id="userInput" class="form-control flex-grow-1" placeholder="请输入您的问题..." autocomplete="off">
+      <button class="btn btn-primary ms-2" onclick="sendMessage()">发送</button>
+      <button class="btn btn-danger ms-2" onclick="clearHistory()">清除上下文</button>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+  .chat-container {
+    max-width: 800px;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+  }
+
+  .chat-box {
+    height: 500px;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .chat-input {
+    padding: 10px;
+    background-color: #f1f1f1;
+  }
+
+  .message-container {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .message-container.user {
+    align-items: flex-end;
+  }
+
+  .message-sender {
+    font-size: 0.8em;
+    color: #666;
+    margin-bottom: 5px;
+  }
+
+  .user-message,
+  .bot-message {
+    padding: 10px 15px;
+    border-radius: 10px;
+    max-width: 70%;
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .user-message {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .bot-message {
+    background-color: #e9ecef;
+    color: black;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .chat-input .btn {
+    height: 58px;
+  }
+
+  @media (max-width: 768px) {
+    .chat-box {
+      height: 300px;
+    }
+
+    .user-message,
+    .bot-message {
+      max-width: 90%;
+    }
+  }
+
+  /* 美化 Markdown 渲染后的内容 */
+  .bot-message h1,
+  .bot-message h2,
+  .bot-message h3 {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+  }
+
+  .bot-message h1 {
+    font-size: 1.5em;
+  }
+
+  .bot-message h2 {
+    font-size: 1.3em;
+  }
+
+  .bot-message h3 {
+    font-size: 1.1em;
+  }
+
+  .bot-message p {
+    margin: 0.5em 0;
+    line-height: 1.5;
+  }
+
+  .bot-message ul,
+  .bot-message ol {
+    margin: 0.5em 0;
+    padding-left: 1.5em;
+  }
+
+  .bot-message li {
+    margin: 0.25em 0;
+  }
+
+  .bot-message strong {
+    font-weight: bold;
+  }
+
+  .bot-message em {
+    font-style: italic;
+  }
+
+  .bot-message code {
+    background-color: #f1f1f1;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-family: monospace;
+  }
+
+  .bot-message pre {
+    background-color: #f1f1f1;
+    padding: 1em;
+    border-radius: 5px;
+    overflow-x: auto;
+  }
+
+  .bot-message blockquote {
+    border-left: 4px solid #ddd;
+    padding-left: 1em;
+    color: #666;
+    margin: 0.5em 0;
+  }
+</style>
+
+<script>
+  const chatBox = document.getElementById('chatBox');
+  const userInput = document.getElementById('userInput');
+
+  // 加载历史记录
+  function loadHistory() {
+    const history = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+    history.forEach(message => {
+      appendMessage(message.content, message.sender);
+    });
+  }
+
+  // 保存对话记录到 localStorage
+  function saveMessageToLocalStorage(content, sender) {
+    const message = { sender, content };
+    const history = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+    history.push(message);
+    localStorage.setItem('chatHistory', JSON.stringify(history));
+  }
+
+  // 添加消息到聊天框
+  function appendMessage(content, sender) {
+    const messageContainer = document.createElement('div');
+    messageContainer.classList.add('message-container', sender === 'user' ? 'user' : 'bot');
+
+    const senderName = document.createElement('div');
+    senderName.classList.add('message-sender');
+    senderName.textContent = sender === 'user' ? '你' : 'AI助手';
+
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+    messageDiv.innerHTML = marked.parse(content); // 解析 Markdown
+
+    messageContainer.appendChild(senderName);
+    messageContainer.appendChild(messageDiv);
+    chatBox.appendChild(messageContainer);
+    chatBox.scrollTop = chatBox.scrollHeight; // 滚动到底部
+
+    // 保存消息到 localStorage
+    saveMessageToLocalStorage(content, sender);
+  }
+
+  // 发送消息
+  async function sendMessage() {
+    const inputText = userInput.value.trim();
+    if (!inputText) return;
+
+    // 显示用户消息
+    appendMessage(inputText, 'user');
+    userInput.value = ''; // 清空输入框
+
+    // 发送消息到后端 API
+    try {
+      const response = await fetch('/ask', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `user_input=${encodeURIComponent(inputText)}`
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const botResponse = await response.text();
+      appendMessage(botResponse, 'bot');
+    } catch (error) {
+      console.error('Error fetching response from API:', error);
+      appendMessage("抱歉，发生了错误。", 'bot');
+    }
+  }
+
+  // 清除上下文记录
+  function clearHistory() {
+    localStorage.removeItem('chatHistory'); // 清除 localStorage 中的记录
+    chatBox.innerHTML = ''; // 清空聊天框
+  }
+
+  // 监听 Enter 键发送消息
+  userInput.addEventListener('keypress', function (event) {
+    if (event.key === 'Enter') {
+      sendMessage();
+    }
+  });
+
+  // 页面加载时加载历史记录
+  window.onload = loadHistory;
+</script>
+
+{% endblock %}
