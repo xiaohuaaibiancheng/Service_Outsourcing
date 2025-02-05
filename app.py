@@ -8,6 +8,7 @@ from openai import OpenAI  # Updated OpenAI import
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationChain
 from flask_cors import CORS
+from news_analyzer import NewsAnalyzer
 
 # Initialize OpenAI client
 openai_client = OpenAI(
@@ -219,6 +220,62 @@ def ask():
     # 返回响应
     return Response(response, content_type='text/plain;charset=utf-8')
 
+# 初始化新闻分析器
+news_analyzer = NewsAnalyzer()
+
+@app.route('/api/analyze', methods=['POST'])
+def analyze_news():
+    """分析新闻接口"""
+    try:
+        data = request.get_json()
+        
+        # 验证输入
+        if not data or (not data.get('url') and not data.get('text')):
+            return jsonify({
+                'error': '请提供新闻URL或文本内容'
+            }), 400
+            
+        # 分析新闻
+        results = news_analyzer.analyze_news(data)
+        
+        if 'error' in results:
+            return jsonify({
+                'error': results['error']
+            }), 400
+            
+        return jsonify(results)
+        
+    except Exception as e:
+        return jsonify({
+            'error': f'分析过程出错: {str(e)}'
+        }), 500
+
+@app.route('/api/batch-analyze', methods=['POST'])
+def batch_analyze():
+    """批量分析新闻接口"""
+    try:
+        data = request.get_json()
+        if not isinstance(data, list):
+            return jsonify({
+                'error': '请提供新闻列表'
+            }), 400
+            
+        results = []
+        for news_item in data:
+            analysis = news_analyzer.analyze_news(news_item)
+            results.append(analysis)
+            
+        return jsonify(results)
+        
+    except Exception as e:
+        return jsonify({
+            'error': f'批量分析过程出错: {str(e)}'
+        }), 500
+
+@app.route('/analyze')
+@login_required
+def analyze_page():
+    return render_template('analyze.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
